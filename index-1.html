@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>La Nonna Kika — Gestión</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Nonna Kika">
+<meta name="theme-color" content="#F5EFE4">
+<link rel="apple-touch-icon" href="icon.png">
+<link rel="manifest" href="manifest-gestion.json">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,700;1,300;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:        #F5EFE4;
+  --bg2:       #EDE5D6;
+  --bg3:       #E3D9C6;
+  --card:      #FDFAF5;
+  --gold:      #B89A6A;
+  --gold-dark: #8C7248;
+  --gold-pale: #F0E8D8;
+  --ink:       #2A2118;
+  --ink2:      #5A4A35;
+  --ink3:      #9A8A72;
+  --border:    #DDD0BA;
+  --red:       #A0382A;
+  --red-pale:  #F5E8E6;
+  --green:     #3A5A2E;
+  --green-pale:#E6EFE3;
+  --warn:      #9A6A20;
+  --warn-pale: #F5EDD8;
+  --white:     #FDFAF5;
+  --shadow:    rgba(42,33,24,.08);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+body {
+  font-family: 'Montserrat', sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  min-height: 100vh;
+  padding-bottom: 72px;
+}
+
+/* ══ HEADER ══ */
+header {
+  background: var(--card);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 20px 12px;
+  position: sticky; top: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.logo-block { display: flex; flex-direction: column; line-height: 1; }
+.logo-top {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 300; font-size: 10px;
+  letter-spacing: 4px; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 1px;
+}
+.logo-main {
+  display: flex; align-items: baseline; gap: 6px;
+}
+.logo-la {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 300; font-style: italic;
+  font-size: 18px; color: var(--ink2);
+  letter-spacing: 1px;
+}
+.logo-nonna {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700; font-size: 22px;
+  letter-spacing: 2px; color: var(--ink);
+  text-transform: uppercase;
+}
+.logo-kika {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700; font-size: 22px;
+  letter-spacing: 2px; color: var(--gold);
+  text-transform: uppercase;
+}
+.hdr-date {
+  text-align: right; font-size: 10px;
+  color: var(--ink3); font-weight: 300; line-height: 1.5;
+  font-family: 'Montserrat', sans-serif;
+}
+
+/* ══ BOTTOM NAV ══ */
+.nav {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  background: var(--card);
+  border-top: 1px solid var(--border);
+  display: flex; z-index: 200;
+}
+.nav-btn {
+  flex: 1; background: none; border: none;
+  color: var(--ink3); padding: 10px 4px 8px;
+  cursor: pointer; display: flex; flex-direction: column;
+  align-items: center; gap: 3px;
+  font-size: 9px; font-family: 'Montserrat', sans-serif;
+  text-transform: uppercase; letter-spacing: 1.5px; font-weight: 600;
+  transition: color .2s; position: relative;
+}
+.nav-btn svg { width: 20px; height: 20px; stroke: currentColor; }
+.nav-btn.active { color: var(--gold); }
+.nav-btn.active::after {
+  content: '';
+  position: absolute; bottom: 0; left: 25%; right: 25%;
+  height: 2px; background: var(--gold); border-radius: 2px 2px 0 0;
+}
+
+/* ══ SECTIONS ══ */
+.section { display: none; padding: 20px 16px; }
+.section.active { display: block; }
+
+/* ══ PAGE HEADER ══ */
+.page-hdr { margin-bottom: 20px; }
+.page-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 300; font-style: italic;
+  font-size: 38px; color: var(--ink); line-height: 1;
+  letter-spacing: -0.5px;
+}
+.page-title strong {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700; font-style: normal;
+  font-size: 14px; color: var(--gold);
+  letter-spacing: 3px; text-transform: uppercase;
+  display: block; margin-bottom: 4px;
+}
+
+/* ══ STATS ══ */
+.stats { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; margin-bottom: 20px; }
+.stat {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 8px; padding: 14px 8px; text-align: center;
+  box-shadow: 0 1px 6px var(--shadow);
+}
+.stat-val {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 700; font-size: 28px; line-height: 1;
+  color: var(--ink);
+}
+.stat-val.gold { color: var(--gold-dark); font-size: 18px; }
+.stat-lbl {
+  font-size: 8px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 1.5px;
+  color: var(--ink3); margin-top: 4px;
+}
+.stat-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  margin: 0 auto 6px; 
+}
+.dot-gold { background: var(--gold); }
+.dot-red  { background: var(--red); }
+.dot-green{ background: var(--green); }
+
+/* ══ FILTERS ══ */
+.filters { display: flex; gap: 6px; margin-bottom: 16px; overflow-x: auto; padding-bottom: 2px; }
+.filt {
+  flex-shrink: 0; padding: 6px 16px; border-radius: 20px;
+  border: 1px solid var(--border); background: var(--card);
+  font-size: 10px; font-weight: 600; letter-spacing: 1px;
+  text-transform: uppercase; color: var(--ink2);
+  cursor: pointer; font-family: 'Montserrat', sans-serif;
+  transition: all .15s;
+}
+.filt.active { background: var(--gold); color: white; border-color: var(--gold); }
+
+/* ══ BUTTONS ══ */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 13px 20px; border: none; border-radius: 6px;
+  font-family: 'Montserrat', sans-serif; font-size: 11px; font-weight: 700;
+  letter-spacing: 2px; text-transform: uppercase; cursor: pointer;
+  transition: all .18s;
+}
+.btn-full { width: 100%; margin-bottom: 16px; }
+.btn-gold { background: var(--gold); color: white; }
+.btn-gold:active { background: var(--gold-dark); }
+.btn-sm { padding: 6px 12px; font-size: 9px; border-radius: 4px; letter-spacing: 1px; }
+.btn-outline { background: var(--card); color: var(--ink2); border: 1px solid var(--border); }
+.btn-danger  { background: var(--red-pale); color: var(--red); border: 1px solid #E0C0BE; }
+
+/* ══ CARD ══ */
+.card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 10px; padding: 14px 16px;
+  margin-bottom: 10px;
+  box-shadow: 0 2px 10px var(--shadow);
+}
+.card-title { font-weight: 600; font-size: 15px; color: var(--ink); }
+.card-sub   { font-size: 11px; color: var(--ink3); margin-top: 2px; font-weight: 400; }
+.card-actions { display: flex; gap: 6px; margin-top: 12px; flex-wrap: wrap; }
+
+/* ══ BADGE ══ */
+.badge {
+  display: inline-block; padding: 4px 10px; border-radius: 20px;
+  font-size: 9px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+}
+.b-pend  { background: var(--warn-pale);  color: var(--warn); }
+.b-ready { background: var(--green-pale); color: var(--green); }
+.b-done  { background: var(--bg2);        color: var(--ink3); }
+.b-low   { background: var(--red-pale);   color: var(--red); }
+.b-ok    { background: var(--green-pale); color: var(--green); }
+
+/* ══ ORDER ══ */
+.order-items { font-size: 12px; color: var(--ink2); margin: 8px 0 4px; line-height: 1.7; }
+.order-total {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 26px; font-weight: 700; color: var(--gold-dark);
+}
+.left-stripe { border-left: 3px solid var(--gold); padding-left: 13px; }
+
+/* ══ STOCK BAR ══ */
+.sbar { height: 4px; background: var(--bg2); border-radius: 2px; margin-top: 8px; overflow: hidden; }
+.sfill { height: 100%; border-radius: 2px; transition: width .4s; }
+.sfill-ok  { background: var(--green); }
+.sfill-low { background: var(--warn); }
+.sfill-out { background: var(--red); }
+
+/* ══ FORM ══ */
+.form-group { margin-bottom: 14px; }
+label {
+  display: block; font-size: 9px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 2px;
+  color: var(--gold-dark); margin-bottom: 6px;
+}
+input, select, textarea {
+  width: 100%; padding: 11px 14px;
+  border: 1px solid var(--border); border-radius: 6px;
+  background: var(--bg); color: var(--ink);
+  font-family: 'Montserrat', sans-serif; font-size: 14px; outline: none;
+  transition: border-color .2s;
+}
+input:focus, select:focus, textarea:focus {
+  border-color: var(--gold); background: var(--white);
+}
+textarea { resize: vertical; min-height: 70px; }
+
+.g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+/* ══ CHIPS ══ */
+.chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--gold-pale); border: 1px solid var(--border);
+  border-radius: 20px; padding: 5px 10px; margin: 3px;
+  font-size: 11px; font-weight: 500;
+}
+.chip-qty {
+  background: var(--gold); color: white;
+  border-radius: 10px; padding: 1px 7px; font-size: 10px; font-weight: 700;
+}
+.chip-del { color: var(--gold-dark); cursor: pointer; font-size: 14px; }
+
+/* ══ MODAL ══ */
+.overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(42,33,24,.5); z-index: 300;
+  align-items: flex-end;
+}
+.overlay.open { display: flex; }
+.sheet {
+  background: var(--bg); width: 100%; max-height: 92vh;
+  overflow-y: auto; border-radius: 20px 20px 0 0;
+  padding: 24px 18px 36px;
+}
+/* handle bar */
+.sheet::before {
+  content: ''; display: block;
+  width: 40px; height: 4px; background: var(--border);
+  border-radius: 2px; margin: -10px auto 18px;
+}
+.sheet-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic; font-weight: 300;
+  font-size: 30px; color: var(--ink);
+  margin-bottom: 20px;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.x-btn {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 50%; width: 30px; height: 30px; cursor: pointer;
+  font-size: 14px; color: var(--ink2);
+  display: flex; align-items: center; justify-content: center;
+}
+
+/* ══ PREVIEW ══ */
+.preview {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 8px; padding: 14px; margin-bottom: 16px;
+}
+.preview-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 8px 0; border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+.preview-row:last-child { border: none; font-weight: 700; }
+.preview-price {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 24px; font-weight: 700; color: var(--gold-dark);
+}
+
+/* ══ CAT LABEL ══ */
+.cat-lbl {
+  font-size: 9px; font-weight: 700; letter-spacing: 2.5px;
+  text-transform: uppercase; color: var(--gold);
+  margin: 20px 0 8px; display: flex; align-items: center; gap: 8px;
+}
+.cat-lbl::after { content:''; flex:1; height:1px; background: var(--border); }
+
+/* ══ PRECIO ══ */
+.prod-precio {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 28px; font-weight: 700; color: var(--gold-dark); line-height: 1;
+}
+
+/* ══ EMPTY ══ */
+.empty { text-align: center; padding: 50px 20px; }
+.empty-icon { font-size: 48px; margin-bottom: 14px; }
+.empty-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic; font-size: 24px; color: var(--ink2); font-weight: 300;
+}
+.empty-sub { font-size: 12px; color: var(--ink3); margin-top: 6px; font-weight: 400; }
+
+/* ══ DIVIDER ══ */
+hr { border: none; border-top: 1px solid var(--border); margin: 14px 0; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <svg width="56" height="56" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+    <!-- círculo exterior -->
+    <circle cx="50" cy="50" r="47" fill="var(--card)" stroke="var(--ink)" stroke-width="2.5"/>
+    <!-- círculo de puntos interior -->
+    <circle cx="50" cy="50" r="40" fill="none" stroke="var(--ink)" stroke-width="1.2"
+      stroke-dasharray="2.2 3.6" stroke-linecap="round"/>
+    <!-- LA NONNA -->
+    <text x="50" y="36" text-anchor="middle"
+      font-family="Montserrat,sans-serif" font-size="11" font-weight="600"
+      letter-spacing="2" fill="var(--ink)">LA NONNA</text>
+    <!-- KIKA -->
+    <text x="50" y="62" text-anchor="middle"
+      font-family="Montserrat,sans-serif" font-size="28" font-weight="700"
+      letter-spacing="3" fill="var(--ink)">KIKA</text>
+    <!-- PASTAS FRESCAS -->
+    <text x="50" y="76" text-anchor="middle"
+      font-family="Montserrat,sans-serif" font-size="7" font-weight="500"
+      letter-spacing="2.5" fill="var(--ink3)">PASTAS FRESCAS</text>
+  </svg>
+  <div class="hdr-date" id="hdr-date"></div>
+</header>
+
+<!-- PEDIDOS -->
+<section class="section active" id="sec-pedidos">
+  <div class="page-hdr">
+    <div class="page-title"><strong>Pedidos</strong>Clientes del día</div>
+  </div>
+  <div class="stats" id="stats"></div>
+  <div class="filters">
+    <button class="filt active" onclick="filtrar('todos',this)">Todos</button>
+    <button class="filt" onclick="filtrar('pendiente',this)">Pendientes</button>
+    <button class="filt" onclick="filtrar('listo',this)">Listos</button>
+    <button class="filt" onclick="filtrar('entregado',this)">Entregados</button>
+  </div>
+  <button class="btn btn-gold btn-full" onclick="abrir('m-ped')">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+    Nuevo Pedido
+  </button>
+  <div id="list-ped"></div>
+</section>
+
+<!-- STOCK -->
+<section class="section" id="sec-stock">
+  <div class="page-hdr">
+    <div class="page-title"><strong>Stock</strong>Ingredientes</div>
+  </div>
+  <button class="btn btn-gold btn-full" onclick="abrir('m-stock')">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+    Agregar Ingrediente
+  </button>
+  <div id="list-stock"></div>
+</section>
+
+<!-- COSTOS -->
+<section class="section" id="sec-cos">
+  <div class="page-hdr">
+    <div class="page-title"><strong>Precios</strong>Costos y márgenes</div>
+  </div>
+  <button class="btn btn-gold btn-full" onclick="abrir('m-cos')">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+    Nuevo Producto
+  </button>
+  <div id="list-cos"></div>
+</section>
+
+<!-- NAV -->
+<nav class="nav">
+  <button class="nav-btn active" onclick="tab('pedidos',this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8">
+      <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/>
+      <rect x="9" y="3" width="6" height="4" rx="2"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="13" y2="16"/>
+    </svg>Pedidos
+  </button>
+  <button class="nav-btn" onclick="tab('stock',this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8">
+      <path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+    </svg>Stock
+  </button>
+  <button class="nav-btn" onclick="tab('cos',this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8">
+      <line x1="12" y1="1" x2="12" y2="23"/>
+      <path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/>
+    </svg>Precios
+  </button>
+</nav>
+
+<!-- MODAL PEDIDO -->
+<div class="overlay" id="m-ped">
+  <div class="sheet">
+    <div class="sheet-title">
+      <span id="m-ped-tit">Nuevo pedido</span>
+      <button class="x-btn" onclick="cerrar('m-ped')">✕</button>
+    </div>
+    <div class="form-group"><label>Cliente</label><input id="p-cli" type="text" placeholder="Nombre del cliente"></div>
+    <div class="form-group"><label>Teléfono</label><input id="p-tel" type="tel" placeholder="381 4000000"></div>
+    <div class="form-group"><label>Fecha de entrega</label><input id="p-fec" type="date"></div>
+    <div class="form-group">
+      <label>Productos</label>
+      <div style="display:flex;gap:8px;margin-bottom:8px">
+        <select id="p-psel" style="flex:1"></select>
+        <input id="p-qty" type="number" min="1" value="1" style="width:68px">
+        <button class="btn btn-outline btn-sm" onclick="addItem()">+</button>
+      </div>
+      <div id="p-chips"></div>
+    </div>
+    <div class="form-group"><label>Notas</label><textarea id="p-not" placeholder="Dirección de envío, relleno especial..."></textarea></div>
+    <button class="btn btn-gold btn-full" onclick="guardarPed()">Guardar Pedido</button>
+  </div>
+</div>
+
+<!-- MODAL STOCK -->
+<div class="overlay" id="m-stock">
+  <div class="sheet">
+    <div class="sheet-title">Ingrediente <button class="x-btn" onclick="cerrar('m-stock')">✕</button></div>
+    <div class="form-group"><label>Nombre</label><input id="s-nom" type="text" placeholder="Ej: Harina 000"></div>
+    <div class="g2">
+      <div class="form-group"><label>Stock actual</label><input id="s-act" type="number" min="0" placeholder="0"></div>
+      <div class="form-group"><label>Stock mínimo</label><input id="s-min" type="number" min="0" placeholder="0"></div>
+    </div>
+    <div class="form-group"><label>Unidad</label>
+      <select id="s-uni"><option>kg</option><option>g</option><option>litros</option><option>unidades</option><option>paquetes</option><option>docenas</option></select>
+    </div>
+    <div class="form-group"><label>Costo por unidad ($)</label><input id="s-cos" type="number" min="0" step="1" placeholder="0"></div>
+    <button class="btn btn-gold btn-full" onclick="guardarStock()">Guardar</button>
+  </div>
+</div>
+
+<!-- MODAL COSTO -->
+<div class="overlay" id="m-cos">
+  <div class="sheet">
+    <div class="sheet-title">
+      <span id="m-cos-tit">Nuevo producto</span>
+      <button class="x-btn" onclick="cerrar('m-cos')">✕</button>
+    </div>
+    <div class="form-group"><label>Nombre del producto</label><input id="c-nom" type="text" placeholder="Ej: Sorrentinos x12"></div>
+    <div class="form-group"><label>Categoría</label>
+      <select id="c-cat">
+        <option>Pastas rellenas</option><option>Pastas secas</option>
+        <option>Pizzas</option><option>Salsas</option><option>Otros</option>
+      </select>
+    </div>
+    <div class="form-group"><label>Costo de elaboración ($)</label><input id="c-cos" type="number" min="0" step="1" placeholder="0"></div>
+    <div class="form-group"><label>Margen de ganancia (%)</label><input id="c-mar" type="number" min="0" value="60" placeholder="60"></div>
+    <div class="preview">
+      <div class="preview-row"><span>Costo</span><span id="pv-c">$0</span></div>
+      <div class="preview-row"><span>Ganancia</span><span id="pv-g">$0</span></div>
+      <div class="preview-row"><span style="color:var(--gold-dark);font-weight:700">Precio de venta</span><span class="preview-price" id="pv-p">$0</span></div>
+    </div>
+    <button class="btn btn-gold btn-full" onclick="guardarCos()">Guardar Producto</button>
+  </div>
+</div>
+
+<script>
+// ── UTILS ──
+const S    = { g:k=>{try{return JSON.parse(localStorage.getItem(k)||'null')}catch{return null}}, s:(k,v)=>localStorage.setItem(k,JSON.stringify(v)) };
+const uid  = ()=>Date.now().toString(36)+Math.random().toString(36).slice(2,5);
+const $m   = n=>'$'+Number(n).toLocaleString('es-AR',{minimumFractionDigits:0,maximumFractionDigits:0});
+const $d   = s=>{ if(!s) return ''; const [y,m,d]=s.split('-'); return `${d}/${m}`; };
+const hoy  = ()=>new Date().toISOString().slice(0,10);
+
+// ── STATE ──
+let pedidos = S.g('nk2_p') || [];
+let stock   = S.g('nk2_s') || initStock();
+let costos  = S.g('nk2_c') || initCostos();
+let pEdit=null, cEdit=null, pItems={}, filtro='todos';
+
+function initStock(){ return [
+  {id:uid(),nombre:'Harina 000',    actual:5, minimo:3, unidad:'kg',       costo:800},
+  {id:uid(),nombre:'Huevos',        actual:24,minimo:12,unidad:'unidades', costo:250},
+  {id:uid(),nombre:'Ricota',        actual:2, minimo:1, unidad:'kg',       costo:2200},
+  {id:uid(),nombre:'Mozzarella',    actual:3, minimo:2, unidad:'kg',       costo:3500},
+  {id:uid(),nombre:'Salsa tomate',  actual:4, minimo:2, unidad:'litros',   costo:900},
+  {id:uid(),nombre:'Aceite oliva',  actual:1, minimo:1, unidad:'litros',   costo:1800},
+];}
+function initCostos(){ return [
+  {id:uid(),nombre:'Sorrentinos Espinaca, queso y ricota x12',        categoria:'Pastas rellenas',costo:4445,margen:80},
+  {id:uid(),nombre:'Sorrentinos Ternera y queso x12',                 categoria:'Pastas rellenas',costo:4445,margen:80},
+  {id:uid(),nombre:'Sorrentinos Roquefort, ricota, queso y nueces x12',categoria:'Pastas rellenas',costo:4445,margen:80},
+  {id:uid(),nombre:'Sorrentinos Jamón y queso x12',                   categoria:'Pastas rellenas',costo:4445,margen:80},
+  {id:uid(),nombre:'Sorrentinos Zapallo cabutia y queso x12',         categoria:'Pastas rellenas',costo:4445,margen:80},
+  {id:uid(),nombre:'Sorrentinos Cheddar, bacon y cebolla caramelizada x12',categoria:'Pastas rellenas',costo:4445,margen:80},
+  {id:uid(),nombre:'Sorrentinos Jamón crudo, queso y ricota x12',     categoria:'Pastas rellenas',costo:4445,margen:80},
+  {id:uid(),nombre:'Pizza Común',    categoria:'Pizzas',costo:3611,margen:80},
+  {id:uid(),nombre:'Pizza Especial', categoria:'Pizzas',costo:4167,margen:80},
+  {id:uid(),nombre:'Pizza Roquefort',categoria:'Pizzas',costo:4167,margen:80},
+  {id:uid(),nombre:'Pizza Jamón',    categoria:'Pizzas',costo:4167,margen:80},
+  {id:uid(),nombre:'Pizza Salame',   categoria:'Pizzas',costo:4167,margen:80},
+  {id:uid(),nombre:'Pizza Choclo',   categoria:'Pizzas',costo:4167,margen:80},
+  {id:uid(),nombre:'Pizza Ternera',  categoria:'Pizzas',costo:4444,margen:80},
+];}
+
+// ── TABS ──
+function tab(id,btn){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('sec-'+id).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ── MODALS ──
+function abrir(id){
+  document.getElementById(id).classList.add('open');
+  if(id==='m-ped' && !pEdit) resetPed();
+  if(id==='m-cos' && !cEdit) resetCos();
+}
+function cerrar(id){
+  document.getElementById(id).classList.remove('open');
+  pEdit=null; cEdit=null; pItems={};
+}
+document.querySelectorAll('.overlay').forEach(o=>o.addEventListener('click',e=>{ if(e.target===o) o.classList.remove('open'); }));
+
+// ── PEDIDOS ──
+function resetPed(){
+  ['p-cli','p-tel','p-not'].forEach(i=>document.getElementById(i).value='');
+  document.getElementById('p-fec').value=hoy();
+  document.getElementById('m-ped-tit').textContent='Nuevo pedido';
+  pItems={}; renderChips();
+}
+function fillSel(){
+  const s=document.getElementById('p-psel');
+  s.innerHTML='<option value="">— elegir producto —</option>';
+  costos.forEach(c=>{ const o=document.createElement('option'); o.value=c.id; o.textContent=c.nombre; s.appendChild(o); });
+}
+function addItem(){
+  const id=document.getElementById('p-psel').value;
+  const q=parseInt(document.getElementById('p-qty').value)||1;
+  if(!id) return;
+  pItems[id]=(pItems[id]||0)+q; renderChips();
+}
+function renderChips(){
+  const c=document.getElementById('p-chips'); c.innerHTML='';
+  Object.entries(pItems).forEach(([id,q])=>{
+    const p=costos.find(x=>x.id===id); if(!p) return;
+    const d=document.createElement('div'); d.className='chip';
+    d.innerHTML=`<span>${p.nombre}</span><span class="chip-qty">${q}</span><span class="chip-del" onclick="remItem('${id}')">×</span>`;
+    c.appendChild(d);
+  });
+}
+function remItem(id){ delete pItems[id]; renderChips(); }
+function totalPed(items){ return Object.entries(items).reduce((s,[id,q])=>{ const p=costos.find(c=>c.id===id); return p?s+p.costo*(1+p.margen/100)*q:s; },0); }
+
+function guardarPed(){
+  const cli=document.getElementById('p-cli').value.trim();
+  if(!cli){ alert('Falta el nombre del cliente'); return; }
+  if(!Object.keys(pItems).length){ alert('Agregá al menos un producto'); return; }
+  const p={ id:pEdit||uid(), cliente:cli,
+    telefono:document.getElementById('p-tel').value.trim(),
+    fecha:document.getElementById('p-fec').value,
+    notas:document.getElementById('p-not').value.trim(),
+    items:{...pItems}, estado:'pendiente', ts:new Date().toISOString() };
+  if(pEdit){ const i=pedidos.findIndex(x=>x.id===pEdit); if(i>=0){p.estado=pedidos[i].estado;pedidos[i]=p;} } 
+  else { pedidos.unshift(p); }
+  S.s('nk2_p',pedidos); cerrar('m-ped'); renderPed();
+}
+
+function filtrar(f,btn){
+  filtro=f;
+  document.querySelectorAll('.filt').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active'); renderPed();
+}
+
+function renderPed(){
+  fillSel();
+  const tot=pedidos.length;
+  const pend=pedidos.filter(p=>p.estado==='pendiente').length;
+  const cobr=pedidos.filter(p=>p.estado!=='entregado').reduce((s,p)=>s+totalPed(p.items),0);
+  document.getElementById('stats').innerHTML=`
+    <div class="stat"><div class="stat-dot dot-gold"></div><div class="stat-val">${tot}</div><div class="stat-lbl">Total</div></div>
+    <div class="stat"><div class="stat-dot dot-red"></div><div class="stat-val">${pend}</div><div class="stat-lbl">Pendientes</div></div>
+    <div class="stat"><div class="stat-dot dot-green"></div><div class="stat-val gold">${$m(cobr)}</div><div class="stat-lbl">A cobrar</div></div>`;
+
+  const lista=filtro==='todos'?pedidos:pedidos.filter(p=>p.estado===filtro);
+  const c=document.getElementById('list-ped');
+  if(!lista.length){ c.innerHTML=`<div class="empty"><div class="empty-icon">🍝</div><div class="empty-title">Sin pedidos todavía</div><div class="empty-sub">Tocá el botón para agregar el primero</div></div>`; return; }
+  const bm={pendiente:'b-pend',listo:'b-ready',entregado:'b-done'};
+  const bl={pendiente:'Pendiente',listo:'Listo ✓',entregado:'Entregado'};
+  c.innerHTML=lista.map(p=>{
+    const t=totalPed(p.items);
+    const itxt=Object.entries(p.items).map(([id,q])=>{ const pr=costos.find(c=>c.id===id); return pr?`${pr.nombre} ×${q}`:''; }).filter(Boolean).join(' · ');
+    return `<div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start">
+        <div class="left-stripe">
+          <div class="card-title">${p.cliente}</div>
+          <div class="card-sub">${p.telefono?'📞 '+p.telefono+'  ':''}📅 ${$d(p.fecha)}</div>
+        </div>
+        <span class="badge ${bm[p.estado]||'b-pend'}">${bl[p.estado]||p.estado}</span>
+      </div>
+      <div class="order-items">${itxt}</div>
+      ${p.notas?`<div class="card-sub" style="margin-top:2px">📝 ${p.notas}</div>`:''}
+      <div class="order-total" style="margin-top:8px">${$m(t)}</div>
+      <div class="card-actions">
+        ${p.estado==='pendiente'?`<button class="btn btn-outline btn-sm" onclick="setEstado('${p.id}','listo')">✓ Listo</button>`:''}
+        ${p.estado==='listo'?`<button class="btn btn-outline btn-sm" onclick="setEstado('${p.id}','entregado')">🚴 Entregar</button>`:''}
+        <button class="btn btn-outline btn-sm" onclick="editPed('${p.id}')">✏ Editar</button>
+        <button class="btn btn-danger btn-sm" onclick="delPed('${p.id}')">🗑</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+function setEstado(id,e){ const p=pedidos.find(x=>x.id===id); if(p){p.estado=e;S.s('nk2_p',pedidos);renderPed();} }
+function delPed(id){ if(!confirm('¿Eliminar este pedido?')) return; pedidos=pedidos.filter(p=>p.id!==id); S.s('nk2_p',pedidos); renderPed(); }
+function editPed(id){
+  const p=pedidos.find(x=>x.id===id); if(!p) return;
+  pEdit=id; pItems={...p.items};
+  document.getElementById('p-cli').value=p.cliente;
+  document.getElementById('p-tel').value=p.telefono||'';
+  document.getElementById('p-fec').value=p.fecha||'';
+  document.getElementById('p-not').value=p.notas||'';
+  document.getElementById('m-ped-tit').textContent='Editar pedido';
+  renderChips(); abrir('m-ped');
+}
+
+// ── STOCK ──
+function guardarStock(){
+  const nom=document.getElementById('s-nom').value.trim();
+  if(!nom){ alert('Falta el nombre'); return; }
+  const item={ id:uid(), nombre:nom,
+    actual:parseFloat(document.getElementById('s-act').value)||0,
+    minimo:parseFloat(document.getElementById('s-min').value)||0,
+    unidad:document.getElementById('s-uni').value,
+    costo:parseFloat(document.getElementById('s-cos').value)||0 };
+  stock.push(item); S.s('nk2_s',stock);
+  cerrar('m-stock');
+  ['s-nom','s-act','s-min','s-cos'].forEach(i=>document.getElementById(i).value='');
+  renderStock();
+}
+function editStock(id){
+  const it=stock.find(s=>s.id===id); if(!it) return;
+  const v=prompt(`Stock actual de "${it.nombre}" (${it.unidad}):`,it.actual);
+  if(v===null) return; const n=parseFloat(v); if(isNaN(n)) return;
+  it.actual=n; S.s('nk2_s',stock); renderStock();
+}
+function delStock(id){ if(!confirm('¿Eliminar ingrediente?')) return; stock=stock.filter(s=>s.id!==id); S.s('nk2_s',stock); renderStock(); }
+function renderStock(){
+  const c=document.getElementById('list-stock');
+  if(!stock.length){ c.innerHTML=`<div class="empty"><div class="empty-icon">📦</div><div class="empty-title">Sin ingredientes</div></div>`; return; }
+  const sorted=[...stock].sort((a,b)=>(a.actual/Math.max(a.minimo,1))-(b.actual/Math.max(b.minimo,1)));
+  c.innerHTML=sorted.map(s=>{
+    const pct=s.minimo>0?Math.min(100,(s.actual/s.minimo)*100):100;
+    const est=s.actual===0?'out':s.actual<s.minimo?'low':'ok';
+    const bt=est==='out'?'¡Sin stock!':est==='low'?'Stock bajo':'OK';
+    const bc=est==='ok'?'b-ok':'b-low';
+    return `<div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start">
+        <div><div class="card-title">${s.nombre}</div>
+          <div class="card-sub">Mín: ${s.minimo} ${s.unidad}${s.costo?' · '+$m(s.costo)+'/'+s.unidad:''}</div>
+        </div><span class="badge ${bc}">${bt}</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;margin-top:10px">
+        <div style="flex:1">
+          <span style="font-size:24px;font-weight:700">${s.actual}</span> <span style="font-size:12px;color:var(--ink3)">${s.unidad}</span>
+          <div class="sbar"><div class="sfill sfill-${est}" style="width:${pct}%"></div></div>
+        </div>
+        <div style="display:flex;gap:5px">
+          <button class="btn btn-outline btn-sm" onclick="editStock('${s.id}')">✏</button>
+          <button class="btn btn-danger btn-sm" onclick="delStock('${s.id}')">🗑</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ── COSTOS ──
+function updPrev(){
+  const c=parseFloat(document.getElementById('c-cos').value)||0;
+  const m=parseFloat(document.getElementById('c-mar').value)||0;
+  const g=c*m/100;
+  document.getElementById('pv-c').textContent=$m(c);
+  document.getElementById('pv-g').textContent=$m(g);
+  document.getElementById('pv-p').textContent=$m(c+g);
+}
+document.getElementById('c-cos').addEventListener('input',updPrev);
+document.getElementById('c-mar').addEventListener('input',updPrev);
+function resetCos(){
+  ['c-nom','c-cos'].forEach(i=>document.getElementById(i).value='');
+  document.getElementById('c-mar').value='60';
+  document.getElementById('m-cos-tit').textContent='Nuevo producto';
+  updPrev();
+}
+function guardarCos(){
+  const nom=document.getElementById('c-nom').value.trim();
+  if(!nom){ alert('Falta el nombre'); return; }
+  const prod={ id:cEdit||uid(), nombre:nom,
+    categoria:document.getElementById('c-cat').value,
+    costo:parseFloat(document.getElementById('c-cos').value)||0,
+    margen:parseFloat(document.getElementById('c-mar').value)||60 };
+  if(cEdit){ const i=costos.findIndex(c=>c.id===cEdit); if(i>=0) costos[i]=prod; }
+  else { costos.push(prod); }
+  S.s('nk2_c',costos); cerrar('m-cos'); renderCos(); renderPed();
+}
+function editCos(id){
+  const c=costos.find(x=>x.id===id); if(!c) return;
+  cEdit=id;
+  document.getElementById('c-nom').value=c.nombre;
+  document.getElementById('c-cat').value=c.categoria;
+  document.getElementById('c-cos').value=c.costo;
+  document.getElementById('c-mar').value=c.margen;
+  document.getElementById('m-cos-tit').textContent='Editar producto';
+  updPrev(); abrir('m-cos');
+}
+function delCos(id){ if(!confirm('¿Eliminar producto?')) return; costos=costos.filter(c=>c.id!==id); S.s('nk2_c',costos); renderCos(); }
+function renderCos(){
+  const c=document.getElementById('list-cos');
+  if(!costos.length){ c.innerHTML=`<div class="empty"><div class="empty-icon">💰</div><div class="empty-title">Sin productos cargados</div></div>`; return; }
+  const cats={};
+  costos.forEach(x=>{ if(!cats[x.categoria]) cats[x.categoria]=[]; cats[x.categoria].push(x); });
+  c.innerHTML=Object.entries(cats).map(([cat,items])=>`
+    <div class="cat-lbl">${cat}</div>
+    ${items.map(x=>{
+      const p=x.costo*(1+x.margen/100);
+      return `<div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start">
+          <div style="flex:1;padding-right:10px">
+            <div class="card-title">${x.nombre}</div>
+            <div class="card-sub">Costo: ${$m(x.costo)} · Margen: ${x.margen}%</div>
+          </div>
+          <div style="text-align:right"><div class="prod-precio">${$m(p)}</div><div class="card-sub">precio venta</div></div>
+        </div>
+        <div class="card-actions">
+          <button class="btn btn-outline btn-sm" onclick="editCos('${x.id}')">✏ Editar</button>
+          <button class="btn btn-danger btn-sm" onclick="delCos('${x.id}')">🗑</button>
+        </div>
+      </div>`;
+    }).join('')}`).join('');
+}
+
+// ── INIT ──
+const n=new Date();
+document.getElementById('hdr-date').innerHTML=
+  n.toLocaleDateString('es-AR',{weekday:'long'}).replace(/^\w/,c=>c.toUpperCase())+'<br>'+
+  n.toLocaleDateString('es-AR',{day:'numeric',month:'long'});
+fillSel(); renderPed(); renderStock(); renderCos();
+</script>
+</body>
+</html>
