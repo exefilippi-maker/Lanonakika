@@ -500,12 +500,18 @@ let costos  = S.g('nk2_c') || initCostos();
 let pEdit=null, cEdit=null, pItems={}, filtro='todos';
 
 function initStock(){ return [
+  // Ingredientes
   {id:uid(),nombre:'Harina 000',    actual:5, minimo:3, unidad:'kg',       costo:800},
   {id:uid(),nombre:'Huevos',        actual:24,minimo:12,unidad:'unidades', costo:250},
   {id:uid(),nombre:'Ricota',        actual:2, minimo:1, unidad:'kg',       costo:2200},
   {id:uid(),nombre:'Mozzarella',    actual:3, minimo:2, unidad:'kg',       costo:3500},
   {id:uid(),nombre:'Salsa tomate',  actual:4, minimo:2, unidad:'litros',   costo:900},
   {id:uid(),nombre:'Aceite oliva',  actual:1, minimo:1, unidad:'litros',   costo:1800},
+  // Productos listos (se descuentan al marcar pedido como Listo)
+  {id:uid(),nombre:'Sorrentinos',   actual:0, minimo:2, unidad:'docenas',  costo:0},
+  {id:uid(),nombre:'Pizza',         actual:0, minimo:3, unidad:'unidades', costo:0},
+  {id:uid(),nombre:'Tallarines',    actual:0, minimo:2, unidad:'paquetes', costo:0},
+  {id:uid(),nombre:'Salsa',         actual:0, minimo:2, unidad:'frascos',  costo:0},
 ];}
 function initCostos(){ return [
   {id:uid(),nombre:'Sorrentinos Espinaca, queso y ricota x12',        categoria:'Pastas rellenas',costo:4445,margen:80},
@@ -632,7 +638,26 @@ function renderPed(){
     </div>`;
   }).join('');
 }
-function setEstado(id,e){ const p=pedidos.find(x=>x.id===id); if(p){p.estado=e;S.s('nk2_p',pedidos);renderPed();} }
+function setEstado(id,e){
+  const p=pedidos.find(x=>x.id===id); if(!p) return;
+  const anterior=p.estado;
+  p.estado=e;
+  if(e==='listo' && anterior==='pendiente'){
+    let bajos=[];
+    Object.entries(p.items).forEach(([cid,qty])=>{
+      const prod=costos.find(c=>c.id===cid); if(!prod) return;
+      const key=prod.nombre.toLowerCase().split(' ')[0];
+      const item=stock.find(s=>s.nombre.toLowerCase().startsWith(key)||s.nombre.toLowerCase().includes(key));
+      if(item){
+        item.actual=Math.max(0,item.actual-qty);
+        if(item.actual<=item.minimo) bajos.push(item.nombre);
+      }
+    });
+    S.s('nk2_s',stock);
+    if(bajos.length) setTimeout(()=>alert('⚠️ Stock bajo:\n'+bajos.map(n=>'• '+n).join('\n')),300);
+  }
+  S.s('nk2_p',pedidos); renderPed(); renderStock();
+}
 function delPed(id){ if(!confirm('¿Eliminar este pedido?')) return; pedidos=pedidos.filter(p=>p.id!==id); S.s('nk2_p',pedidos); renderPed(); }
 function editPed(id){
   const p=pedidos.find(x=>x.id===id); if(!p) return;
